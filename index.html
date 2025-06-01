@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>언어와 매체 과정형 평가 1</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        #search-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        #search-input {
+            padding: 10px;
+            width: 300px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        #student-list {
+            list-style-type: none;
+            padding: 0;
+            text-align: center;
+        }
+        #student-list li {
+            margin: 8px 0;
+        }
+        #student-list a {
+            text-decoration: none;
+            color: #007bff;
+            font-size: 18px;
+            padding: 5px 10px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        #student-list a:hover {
+            color: #0056b3;
+            background-color: #e9ecef;
+            border-color: #dae0e5;
+        }
+        /* .student-image 클래스는 image_view.html로 이동 또는 불필요 */
+        #no-results {
+            text-align: center;
+            color: #777;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h1>언어와 매체 과정형 평가 1</h1>
+    <div id="search-container">
+        <input type="text" id="search-input" placeholder="학생 이름 검색...">
+    </div>
+    <ul id="student-list">
+    </ul>
+    <p id="no-results" style="display:none;">검색 결과가 없습니다.</p>
+
+    <script>
+        const images = [
+            "3101_구명지.png", "3102_노희정.png", "3103_도현지-1.png", "3103_도현지-2.png", "3104_박남금.png",
+            "3105_박세진.png", "3106_박현경.png", "3107_배수연.png", "3109_안영애.png", "3110_이승은.png",
+            "3111_이시은.png", "3112_이주은.png", "3113_이지선.png", "3114_이채원.png", "3116_임설희.png",
+            "3117_장지윤.png", "3118_차정인.png", "3119_하이안.png", "3202_김난영.png", "3204_박세연.png",
+            "3205_변지예.png", "3206_신선명.png", "3207_여수아.png", "3208_우혜선.png", "3209_유예리.png",
+            "3210_육은정.png", "3211_이도경.png", "3212_이여경.png", "3213_이연서.png", "3214_이은채.png",
+            "3215_이하송.png", "3216_임효리.png", "3217_전상은.png", "3219_주초연.png", "3220_최유빈.png",
+            "3301_김나연.png", "3302_김미진.png", "3303_김채윤.png", "3304_박지현.png", "3305_손아연.png",
+            "3306_신정현.png", "3307_여나영.png", "3308_오현선.png", "3309_유현지.png", "3310_윤누리나라.png",
+            "3311_이가현.png", "3312_이지현.png", "3313_이채빈.png", "3314_이채희.png", "3315_장윤희.png",
+            "3317_최윤정.png", "3401_김나영.png", "3402_김보라.png", "3403_문채원.png", "3404_문현아.png",
+            "3405_박소현.png", "3406_박수진.png", "3407_배나연.png", "3408_심인지.png", "3409_엄세정.png",
+            "3410_윤소영.png", "3413_장지영.png", "3414_전정하.png", "3415_정지우.png", "3416_최수현.png",
+            "3417_홍수민.png", "3501_권다희.png", "3502_김가린.png", "3503_김민서.png", "3505_김윤희.png",
+            "3506_도가원.png", "3507_도예서.png", "3508_문초록.png", "3510_서은채.png", "3511_손희원.png",
+            "3512_안다영.png", "3513_안수희.png", "3514_오유정.png", "3515_이초은.png", "3516_전진주.png",
+            "3517_황예진.png", "3518_최미희.png"
+        ];
+
+        const studentListElement = document.getElementById('student-list');
+        const searchInput = document.getElementById('search-input');
+        const noResultsElement = document.getElementById('no-results');
+
+        function displayStudents(filter = '') {
+            studentListElement.innerHTML = '';
+            const filteredStudents = images.filter(imageName => {
+                const studentNameOnly = imageName.substring(imageName.indexOf('_') + 1, imageName.lastIndexOf('.')).replace(/-[0-9]$/, '');
+                return studentNameOnly.toLowerCase().includes(filter.toLowerCase());
+            });
+
+            if (filteredStudents.length === 0 && filter !== '') {
+                noResultsElement.style.display = 'block';
+            } else {
+                noResultsElement.style.display = 'none';
+            }
+
+            filteredStudents.forEach(imageName => {
+                const listItem = document.createElement('li');
+                const link = document.createElement('a');
+                
+                const studentDisplayName = imageName.substring(imageName.indexOf('_') + 1, imageName.lastIndexOf('.'));
+                link.textContent = studentDisplayName;
+                // image_view.html로 이미지 파일명을 파라미터로 전달
+                link.href = `image_view.html?image=${encodeURIComponent(imageName)}`;
+                link.target = '_blank'; // 새 탭에서 열기
+
+                listItem.appendChild(link);
+                studentListElement.appendChild(listItem);
+            });
+        }
+
+        searchInput.addEventListener('input', (event) => {
+            displayStudents(event.target.value);
+        });
+
+        // 초기 학생 목록 표시
+        displayStudents();
+    </script>
+</body>
+</html>
